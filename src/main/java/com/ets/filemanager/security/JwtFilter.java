@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
@@ -27,9 +28,9 @@ public class JwtFilter extends OncePerRequestFilter {
                 String username = jwtService.getUserNameFromJwtToken(jwt);
                 long count = userRepository.countByUsernameAndEnabled(username, true);
                 if(count > 0) {
-                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null);
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    authentication.setAuthenticated(true);
+//                    authentication.setAuthenticated(true);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 } else {
                     logger.error("Cannot set user authentication: username not found");
