@@ -5,6 +5,9 @@ import com.ets.filemanager.dto.LoginDto;
 import com.ets.filemanager.dto.TokenDto;
 import com.ets.filemanager.security.EtsUserDetails;
 import com.ets.filemanager.security.JwtService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +26,15 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@Tag(name = "Authentication")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
     @PostMapping("/login")
+    @Operation(summary = "Get new JWT token with username and password")
+    @SecurityRequirements()
     public ResponseEntity<?> authenticate(@Valid @RequestBody LoginDto loginDto) {
         Authentication authentication;
         try {
